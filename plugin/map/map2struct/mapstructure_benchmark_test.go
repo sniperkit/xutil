@@ -1,8 +1,10 @@
 package map2struct
 
 import (
-	"encoding/json"
 	"testing"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 func Benchmark_Decode(b *testing.B) {

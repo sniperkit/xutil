@@ -1,12 +1,14 @@
 package map2struct
 
 import (
-	"encoding/json"
 	"io"
 	"reflect"
 	"sort"
 	"strings"
 	"testing"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 type Basic struct {

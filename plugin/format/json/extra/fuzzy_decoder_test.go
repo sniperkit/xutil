@@ -3,7 +3,7 @@ package extra
 import (
 	"testing"
 
-	"github.com/json-iterator/go"
+	"github.com/sniperkit/xutil/plugin/format/json"
 	"github.com/stretchr/testify/require"
 )
 

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/json-iterator/go"
+	"github.com/sniperkit/xutil/plugin/format/json"
 )
 
 const maxUint = ^uint(0)

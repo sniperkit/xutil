@@ -10,7 +10,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	fuzz "github.com/google/gofuzz"
-	jsoniter "github.com/json-iterator/go"
+	jsoniter "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 func Test_PartialUnmarshal(t *testing.T) {

@@ -8,13 +8,15 @@
 package map2struct
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
 	"sort"
 	"strconv"
 	"strings"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 // DecodeHookFunc is the callback function that can be used for

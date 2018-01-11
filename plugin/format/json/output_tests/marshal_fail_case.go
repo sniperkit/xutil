@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	jsoniter "github.com/json-iterator/go"
+	jsoniter "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 type typeForTest struct {

@@ -3,7 +3,7 @@ package test
 import (
 	"encoding/json"
 	"errors"
-	"github.com/json-iterator/go"
+	"github.com/sniperkit/xutil/plugin/format/json"
 	"github.com/stretchr/testify/require"
 	"io"
 	"testing"
