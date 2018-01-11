@@ -6,13 +6,15 @@ package yaml
 import (
 	"bytes"
 	"encoding"
-	"encoding/json"
 	"reflect"
 	"sort"
 	"strings"
 	"sync"
 	"unicode"
 	"unicode/utf8"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 // indirect walks down v allocating pointers as needed,

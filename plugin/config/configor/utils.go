@@ -11,8 +11,10 @@ import (
 	// "encoding/json"
 
 	"github.com/BurntSushi/toml"
-	json "github.com/sniperkit/xutil/plugin/format/json"
 	yaml "gopkg.in/yaml.v2"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
+	// yaml "github.com/sniperkit/xutil/plugin/format/yaml"
 )
 
 func (configor *Configor) getENVPrefix(config interface{}) string {
