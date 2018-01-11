@@ -1,6 +1,8 @@
 package jsonpointer
 
-import "testing"
+import (
+	"testing"
+)
 
 var testNewTokenFromEscapedCases = []struct {
 	token    string

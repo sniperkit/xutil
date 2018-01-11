@@ -10,10 +10,10 @@ json2csv can be used as a library and command line tool.
 Install
 -------
 
-Use `go get` or just download [binary releases](https://github.com/yukithm/json2csv/releases).
+Use `go get` or just download [binary releases](https://github.com/sniperkit/xutil/plugin/format/convert/json2csv/releases).
 
 ```
-go get github.com/yukithm/json2csv/cmd/json2csv
+go get github.com/sniperkit/xutil/plugin/format/convert/json2csv/cmd/json2csv
 ```
 
 

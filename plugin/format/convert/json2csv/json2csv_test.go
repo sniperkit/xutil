@@ -2,9 +2,11 @@ package json2csv
 
 import (
 	"bytes"
-	"encoding/json"
 	"reflect"
 	"testing"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 // Decode JSON with UseNumber option.

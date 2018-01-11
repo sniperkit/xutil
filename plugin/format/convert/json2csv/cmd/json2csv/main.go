@@ -1,14 +1,15 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
+	// "encoding/json"
 
-	"github.com/yukithm/json2csv"
-	"github.com/yukithm/json2csv/jsonpointer"
+	"github.com/sniperkit/xutil/plugin/format/convert/json2csv"
+	"github.com/sniperkit/xutil/plugin/format/convert/json2csv/jsonpointer"
+	json "github.com/sniperkit/xutil/plugin/format/json"
 
 	"github.com/codegangsta/cli"
 )
@@ -18,7 +19,7 @@ const (
 	ApplicationName = "json2csv"
 
 	// Version is the version number of this application.
-	Version = "0.1.1"
+	Version = "0.1.2"
 )
 
 var headerStyleTable = map[string]json2csv.KeyStyle{
@@ -156,7 +157,10 @@ func readJSON(r io.Reader) (interface{}, error) {
 }
 
 func printCSV(w io.Writer, results []json2csv.KeyValue, headerStyle json2csv.KeyStyle, transpose bool) error {
-	csv := json2csv.NewCSVWriter(w)
+	csv, err := json2csv.NewCSVWriter(w)
+	if err != nil {
+		return err
+	}
 	csv.HeaderStyle = headerStyle
 	csv.Transpose = transpose
 	if err := csv.WriteCSV(results); err != nil {

@@ -1,9 +1,11 @@
 package jsonpointer
 
 import (
-	"encoding/json"
 	"reflect"
 	"testing"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 var testNewCases = []struct {

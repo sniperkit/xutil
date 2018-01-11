@@ -3,6 +3,7 @@ package ccsv
 
 import (
 	"encoding/csv"
+	"io"
 	"os"
 	"sync"
 )
@@ -15,13 +16,18 @@ type CsvWriter struct {
 }
 
 // NewCsvWriter creates a CSV file and returns a CsvWriter
-func NewCsvWriter(fileName string) (*CsvWriter, error) {
+func NewWriterToFile(fileName string) (*CsvWriter, error) {
 	csvFile, err := os.Create(fileName)
 	if err != nil {
 		return nil, err
 	}
 	w := csv.NewWriter(csvFile)
 	return &CsvWriter{csvWriter: w, mutex: &sync.Mutex{}, file: csvFile}, nil
+}
+
+// NewCSVWriter returns new CSVWriter with JSONPointerStyle.
+func NewWriter(w io.Writer) (*CsvWriter, error) {
+	return &CsvWriter{csvWriter: csv.NewWriter(w), mutex: &sync.Mutex{}}, nil
 }
 
 // Write a single row to a CSV file
@@ -36,6 +42,11 @@ func (w *CsvWriter) WriteAll(records [][]string) error {
 	w.mutex.Lock()
 	defer w.mutex.Unlock()
 	return w.csvWriter.WriteAll(records)
+}
+
+func (w *CsvWriter) Error() error {
+	err := w.csvWriter.Write(nil)
+	return err
 }
 
 // Flush writes any pending rows

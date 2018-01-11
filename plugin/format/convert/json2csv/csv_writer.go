@@ -1,11 +1,12 @@
 package json2csv
 
 import (
-	"encoding/csv"
 	"io"
 	"sort"
+	// "encoding/csv"
 
-	"github.com/yukithm/json2csv/jsonpointer"
+	"github.com/sniperkit/xutil/plugin/format/convert/json2csv/jsonpointer"
+	csv "github.com/sniperkit/xutil/plugin/format/csv/concurrent-writer"
 )
 
 // KeyStyle represents the specific style of the key.
@@ -28,19 +29,25 @@ const (
 
 // CSVWriter writes CSV data.
 type CSVWriter struct {
-	*csv.Writer
+	*csv.CsvWriter
 	HeaderStyle KeyStyle
 	Transpose   bool
 }
 
 // NewCSVWriter returns new CSVWriter with JSONPointerStyle.
-func NewCSVWriter(w io.Writer) *CSVWriter {
+func NewCSVWriter(w io.Writer) (*CSVWriter, error) {
+	writer, err := csv.NewWriter(w)
+	if err != nil {
+		return nil, err
+	}
 	return &CSVWriter{
-		csv.NewWriter(w),
+		writer,
 		JSONPointerStyle,
 		false,
-	}
+	}, nil
 }
+
+// NewCsvWriter
 
 // WriteCSV writes CSV data.
 func (w *CSVWriter) WriteCSV(results []KeyValue) error {

@@ -1,13 +1,14 @@
 package json2csv
 
 import (
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"sort"
 	"strconv"
+	// "encoding/json"
 
-	"github.com/yukithm/json2csv/jsonpointer"
+	"github.com/sniperkit/xutil/plugin/format/convert/json2csv/jsonpointer"
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 var jsonNumberType = reflect.TypeOf(json.Number(""))
