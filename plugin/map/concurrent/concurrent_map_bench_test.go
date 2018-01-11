@@ -1,7 +1,9 @@
 package cmap
 
-import "testing"
-import "strconv"
+import (
+	"strconv"
+	"testing"
+)
 
 func BenchmarkItems(b *testing.B) {
 	m := New()

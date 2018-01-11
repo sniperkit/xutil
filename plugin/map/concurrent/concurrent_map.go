@@ -1,8 +1,10 @@
 package cmap
 
 import (
-	"encoding/json"
 	"sync"
+	// "encoding/json"
+
+	json "github.com/sniperkit/xutil/plugin/format/json"
 )
 
 var SHARD_COUNT = 32

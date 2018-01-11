@@ -1,0 +1,12 @@
+package: github.com/sniperkit/xutil
+import:
+- package: github.com/codegangsta/cli
+testImport:
+- package: github.com/davecgh/go-spew
+  subpackages:
+  - spew
+- package: github.com/google/gofuzz
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
+  - require
