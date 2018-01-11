@@ -5,7 +5,7 @@
 // other structs, etc. and the decoder will properly decode nested
 // maps and so on into the proper structures in the native Go struct.
 // See the examples to see what the decoder is capable of.
-package mapstructure
+package map2struct
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package xstructs
+package structs
 
 import (
 	"errors"

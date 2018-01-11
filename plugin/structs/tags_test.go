@@ -1,6 +1,8 @@
-package xstructs
+package structs
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestParseTag_Name(t *testing.T) {
 	tags := []struct {

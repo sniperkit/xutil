@@ -1,6 +1,8 @@
-package xstructs
+package structs
 
-import "strings"
+import (
+	"strings"
+)
 
 // tagOptions contains a slice of tag options
 type tagOptions []string

@@ -1,6 +1,8 @@
-package mapstructure
+package map2struct
 
-import "testing"
+import (
+	"testing"
+)
 
 // GH-1
 func TestDecode_NilValue(t *testing.T) {

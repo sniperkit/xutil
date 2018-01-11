@@ -1,4 +1,4 @@
-package mapstructure
+package map2struct
 
 import (
 	"encoding/json"

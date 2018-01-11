@@ -1,9 +1,8 @@
 // Package structs contains various utilities functions to work with structs.
-package xstructs
+package structs
 
 import (
 	"fmt"
-
 	"reflect"
 )
 
