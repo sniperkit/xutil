@@ -3,11 +3,12 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"io/ioutil"
+	// "encoding/csv"
 
-	"github.com/mohae/struct2csv"
+	"github.com/k0kubun/pp"
+	csv "github.com/sniperkit/xutil/plugin/format/csv/concurrent-writer"
+	"github.com/sniperkit/xutil/plugin/struct/csv"
 )
 
 type Person struct {
@@ -155,20 +156,25 @@ func main() {
 	enc := struct2csv.New()
 	enc.SetSeparators("\"", "\"")
 	data, err := enc.Marshal(people)
-	// open a tmp file to write to
-	f, err := ioutil.TempFile("", "CSV")
 	if err != nil {
 		fmt.Println(err)
-		return
 	}
-	defer f.Close()
+
+	pp.Println("struct2csv: ", data)
+	output_file := "test.csv"
+
 	// get a new csv writer
-	w := csv.NewWriter(f)
+	w, err := csv.NewWriterToFile(output_file)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	// encode
 	err = w.WriteAll(data)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	// output message
-	fmt.Printf("Data marshaled to CSV and saved as %s\n", f.Name())
+	fmt.Printf("Data marshaled to CSV and saved as %s\n", output_file)
 }

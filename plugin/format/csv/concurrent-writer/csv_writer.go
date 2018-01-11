@@ -12,7 +12,7 @@ import (
 type CsvWriter struct {
 	mutex     *sync.Mutex
 	csvWriter *csv.Writer
-	file      *os.File
+	f         *os.File
 }
 
 // NewCsvWriter creates a CSV file and returns a CsvWriter
@@ -22,12 +22,12 @@ func NewWriterToFile(fileName string) (*CsvWriter, error) {
 		return nil, err
 	}
 	w := csv.NewWriter(csvFile)
-	return &CsvWriter{csvWriter: w, mutex: &sync.Mutex{}, file: csvFile}, nil
+	return &CsvWriter{csvWriter: w, mutex: &sync.Mutex{}, f: csvFile}, nil
 }
 
 // NewCSVWriter returns new CSVWriter with JSONPointerStyle.
 func NewWriter(w io.Writer) (*CsvWriter, error) {
-	return &CsvWriter{csvWriter: csv.NewWriter(w), mutex: &sync.Mutex{}}, nil
+	return &CsvWriter{csvWriter: csv.NewWriter(w), mutex: &sync.Mutex{}, f: nil}, nil
 }
 
 // Write a single row to a CSV file
@@ -45,8 +45,40 @@ func (w *CsvWriter) WriteAll(records [][]string) error {
 }
 
 func (w *CsvWriter) Error() error {
+
 	err := w.csvWriter.Write(nil)
 	return err
+}
+
+// Comma is the field delimiter, set to '.'
+func (w *CsvWriter) Comma() rune {
+
+	w.mutex.Lock()
+	defer w.mutex.Unlock()
+	return w.csvWriter.Comma
+}
+
+// SetComma takes the passed rune and uses it to set the field
+// delimiter for CSV fields.
+func (w *CsvWriter) SetComma(r rune) {
+
+	w.mutex.Lock()
+	defer w.mutex.Unlock()
+	w.csvWriter.Comma = r
+}
+
+// UseCRLF exposes the csv writer's UseCRLF field.
+func (w *CsvWriter) UseCRLF() bool {
+	w.mutex.Lock()
+	defer w.mutex.Unlock()
+	return w.csvWriter.UseCRLF
+}
+
+// SetUseCRLF set's the csv'writer's UseCRLF field
+func (w *CsvWriter) SetUseCRLF(b bool) {
+	w.mutex.Lock()
+	defer w.mutex.Unlock()
+	w.csvWriter.UseCRLF = b
 }
 
 // Flush writes any pending rows
@@ -64,5 +96,5 @@ func (w *CsvWriter) Close() error {
 	if err != nil {
 		return err
 	}
-	return w.file.Close()
+	return w.f.Close()
 }

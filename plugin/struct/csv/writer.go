@@ -11,23 +11,39 @@
 package struct2csv
 
 import (
-	"encoding/csv"
 	"io"
+
+	"github.com/k0kubun/pp"
+	csv "github.com/sniperkit/xutil/plugin/format/csv/concurrent-writer"
 )
 
 // A Writer writes structs to a CSV encoded file.  This wraps both `csv.Writer`
 // and this package's `Encoder`.
 type Writer struct {
+	w csv.CsvWriter
 	e Encoder
-	w *csv.Writer
 	b int64
 	r int
 }
 
-// NewWriter returns a new Writer that write to w.
-func NewWriter(w io.Writer) *Writer {
+// NewWriter returns new CSVWriter with JSONPointerStyle.
+func NewWriter(w io.Writer) (*Writer, error) {
+	cwriter, err := csv.NewWriter(w)
+	if err != nil {
+		return nil, err
+	}
 	enc := New()
-	return &Writer{e: *enc, w: csv.NewWriter(w)}
+	return &Writer{w: *cwriter, e: *enc}, nil
+}
+
+// NewCsvWriter creates a CSV file and returns a CsvWriter
+func NewWriterToFile(fileName string) (*Writer, error) {
+	cwriter, err := csv.NewWriterToFile(fileName)
+	if err != nil {
+		return nil, err
+	}
+	enc := New()
+	return &Writer{w: *cwriter, e: *enc}, nil
 }
 
 // WriteColNames writes out the column names of the CSV field.
@@ -37,7 +53,7 @@ func (w *Writer) WriteColNames(st interface{}) error {
 		return err
 	}
 	w.r++
-	return w.w.Write(cols)
+	return w.Write(cols)
 }
 
 // WriteStruct takes a struct, marshals it to CSV and writhes the CSV
@@ -62,7 +78,7 @@ func (w *Writer) WriteStructs(st interface{}) error {
 	w.r = len(rows)
 	w.w.WriteAll(rows)
 	w.w.Flush()
-	return w.w.Error()
+	return w.Error()
 }
 
 // Write takes a slice of strings and writes them as a single CSV record.
@@ -78,6 +94,7 @@ func (w *Writer) Write(row []string) error {
 // WriteAll writes multiple CSV records, a two-d slice of strings,
 // `[][]string` to w using Write and then calls Flush.
 func (w *Writer) WriteAll(data [][]string) error {
+	pp.Println("data:", data)
 	err := w.w.WriteAll(data)
 	if err != nil {
 		return err
@@ -88,7 +105,7 @@ func (w *Writer) WriteAll(data [][]string) error {
 
 // Flush writes any buffered data to the underlying io.Writer.
 func (w *Writer) Flush() {
-	w.w.Flush()
+	w.Flush()
 }
 
 // Error reports an error that has occurred during a previous Write or Flush
@@ -105,23 +122,23 @@ func (w *Writer) Rows() int {
 
 // Comma is the field delimiter, set to '.'
 func (w *Writer) Comma() rune {
-	return w.w.Comma
+	return w.w.Comma()
 }
 
 // SetComma takes the passed rune and uses it to set the field
 // delimiter for CSV fields.
 func (w *Writer) SetComma(r rune) {
-	w.w.Comma = r
+	w.w.SetComma(r)
 }
 
 // UseCRLF exposes the csv writer's UseCRLF field.
 func (w *Writer) UseCRLF() bool {
-	return w.w.UseCRLF
+	return w.w.UseCRLF()
 }
 
 // SetUseCRLF set's the csv'writer's UseCRLF field
 func (w *Writer) SetUseCRLF(b bool) {
-	w.w.UseCRLF = b
+	w.w.SetUseCRLF(b)
 }
 
 // Expose Encoder methods

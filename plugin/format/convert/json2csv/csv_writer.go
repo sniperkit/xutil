@@ -34,7 +34,7 @@ type CSVWriter struct {
 	Transpose   bool
 }
 
-// NewCSVWriter returns new CSVWriter with JSONPointerStyle.
+// NewCSVWriter returns new CSVWriter with DotBracketStyle.
 func NewCSVWriter(w io.Writer) (*CSVWriter, error) {
 	writer, err := csv.NewWriter(w)
 	if err != nil {
@@ -42,7 +42,7 @@ func NewCSVWriter(w io.Writer) (*CSVWriter, error) {
 	}
 	return &CSVWriter{
 		writer,
-		JSONPointerStyle,
+		DotBracketStyle,
 		false,
 	}, nil
 }
