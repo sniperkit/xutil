@@ -1,7 +1,6 @@
 package configor
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -9,8 +8,10 @@ import (
 	"path"
 	"reflect"
 	"strings"
+	// "encoding/json"
 
 	"github.com/BurntSushi/toml"
+	json "github.com/sniperkit/xutil/plugin/format/json"
 	yaml "gopkg.in/yaml.v2"
 )
 
