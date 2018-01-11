@@ -1,4 +1,4 @@
-package structtag
+package tag
 
 import (
 	"bytes"
