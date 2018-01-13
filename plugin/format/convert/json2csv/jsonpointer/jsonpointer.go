@@ -108,9 +108,19 @@ func (p JSONPointer) String() string {
 	if len(s) == 0 {
 		return ""
 	}
-
 	return "/" + strings.Join(p.EscapedStrings(), "/")
 }
+
+/*
+// String returns JSON Pointer representation in lowercase.
+func (p JSONPointer) LowerCase() []string {
+	tokens := make([]string, 0, len(p))
+	for _, token := range p {
+		tokens = append(tokens, strings.ToLower(token))
+	}
+	return tokens
+}
+*/
 
 // DotNotation returns dot-notated representation.
 func (p JSONPointer) DotNotation(bracketIndex bool) string {

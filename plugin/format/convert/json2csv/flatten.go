@@ -51,7 +51,8 @@ func _flatten(out KeyValue, obj interface{}, key jsonpointer.JSONPointer) error 
 	if !ok {
 		value = reflect.ValueOf(obj)
 	}
-	for value.Kind() == reflect.Interface {
+
+	for value.Kind() == reflect.Interface { // || value.Kind() == reflect.Ptr {
 		value = value.Elem()
 	}
 
@@ -66,20 +67,35 @@ func _flatten(out KeyValue, obj interface{}, key jsonpointer.JSONPointer) error 
 	switch value.Kind() {
 	case reflect.Map:
 		_flattenMap(out, value, key)
+
 	case reflect.Slice:
 		_flattenSlice(out, value, key)
+
+	case reflect.Ptr:
+		if !value.IsNil() {
+			out[key.String()] = value.Elem()
+		} else {
+			out[key.String()] = ""
+		}
+
 	case reflect.String:
 		out[key.String()] = value.String()
+
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		out[key.String()] = value.Int()
+
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		out[key.String()] = value.Uint()
+
 	case reflect.Float32, reflect.Float64:
 		out[key.String()] = value.Float()
+
 	case reflect.Bool:
 		out[key.String()] = value.Bool()
+
 	default:
 		return fmt.Errorf("Unknown kind: %s", value.Kind())
+
 	}
 	return nil
 }

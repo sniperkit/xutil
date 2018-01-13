@@ -45,7 +45,6 @@ func (w *CsvWriter) WriteAll(records [][]string) error {
 }
 
 func (w *CsvWriter) Error() error {
-
 	err := w.csvWriter.Write(nil)
 	return err
 }
@@ -61,7 +60,6 @@ func (w *CsvWriter) Comma() rune {
 // SetComma takes the passed rune and uses it to set the field
 // delimiter for CSV fields.
 func (w *CsvWriter) SetComma(r rune) {
-
 	w.mutex.Lock()
 	defer w.mutex.Unlock()
 	w.csvWriter.Comma = r

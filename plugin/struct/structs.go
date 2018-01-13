@@ -4,6 +4,10 @@ package structs
 import (
 	"fmt"
 	"reflect"
+	"strings"
+
+	// "github.com/iancoleman/strcase"
+	"github.com/fatih/camelcase"
 )
 
 var (
@@ -92,6 +96,8 @@ func (s *Struct) Map() map[string]interface{} {
 	return out
 }
 
+// var convertCamelToSnake bool
+
 // FillMap is the same as Map. Instead of returning the output, it fills the
 // given map.
 func (s *Struct) FillMap(out map[string]interface{}) {
@@ -102,7 +108,9 @@ func (s *Struct) FillMap(out map[string]interface{}) {
 	fields := s.structFields()
 
 	for _, field := range fields {
+
 		name := field.Name
+
 		val := s.value.FieldByName(name)
 		isSubStruct := false
 		var finalVal interface{}
@@ -149,9 +157,13 @@ func (s *Struct) FillMap(out map[string]interface{}) {
 
 		if isSubStruct && (tagOpts.Has("flatten")) {
 			for k := range finalVal.(map[string]interface{}) {
-				out[k] = finalVal.(map[string]interface{})[k]
+				splitted := camelcase.Split(k)
+				key := strings.ToLower(strings.Join(splitted, "_"))
+				out[key] = finalVal.(map[string]interface{})[k]
 			}
 		} else {
+			splitted := camelcase.Split(name)
+			name = strings.ToLower(strings.Join(splitted, "_"))
 			out[name] = finalVal
 		}
 	}

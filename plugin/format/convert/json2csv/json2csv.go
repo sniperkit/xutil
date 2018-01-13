@@ -4,12 +4,16 @@ package json2csv
 import (
 	"errors"
 	"reflect"
+	// ureflect "github.com/XieZhendong/ureflect"
+	// "github.com/oleiade/reflections"
 )
 
 // JSON2CSV converts JSON to CSV.
 func JSON2CSV(data interface{}) ([]KeyValue, error) {
 	results := []KeyValue{}
 	v := valueOf(data)
+	//v := reflect.ValueOf(data)
+
 	switch v.Kind() {
 	case reflect.Map:
 		if v.Len() > 0 {
@@ -19,6 +23,7 @@ func JSON2CSV(data interface{}) ([]KeyValue, error) {
 			}
 			results = append(results, result)
 		}
+
 	case reflect.Slice:
 		if isObjectArray(v) {
 			for i := 0; i < v.Len(); i++ {
@@ -37,8 +42,10 @@ func JSON2CSV(data interface{}) ([]KeyValue, error) {
 				results = append(results, result)
 			}
 		}
+
 	default:
 		return nil, errors.New("Unsupported JSON structure.")
+
 	}
 
 	return results, nil
