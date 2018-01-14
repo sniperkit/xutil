@@ -6,8 +6,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/k0kubun/pp"
-
+	// "github.com/k0kubun/pp"
 	"github.com/sniperkit/xutil/plugin/format/convert/json2csv/jsonpointer"
 	csv "github.com/sniperkit/xutil/plugin/format/csv/concurrent-writer"
 )
@@ -103,7 +102,6 @@ func (w *CSVWriter) WriteCSV(results []KeyValue) error {
 	if w.Transpose {
 		return w.writeTransposedCSV(results)
 	}
-
 	return w.writeCSV(results)
 }
 
@@ -183,40 +181,41 @@ func (w *CSVWriter) writeListCSV(results []KeyValue) error {
 	}
 	sort.Sort(pts)
 	keys := pts.Strings()
-	header := w.getHeader(pts)
+	// header := w.getHeader(pts)
+	extra := []string{"remote_id", "processed_at"}
 
-	for _, result := range results {
-		record := toRecord(result, keys)
-		pp.Println("toRecord().keys=", keys)
-		pp.Println("toRecord().record=", record)
+	var line []string
+	for _, key := range keys {
+		record := toTransposedList(results, key)
+		line = append(line, record...)
+	}
+	line = append(line, extra...)
+	if err := w.Write(line); err != nil {
+		return err
 	}
 
-	for i, key := range keys {
-		record := toTransposedList(results, key, header[i])
-		pp.Println("toTransposedList().key=", key)
-		pp.Println("toTransposedList().header[i]=", header[i])
-		pp.Println("toTransposedList().record=", record)
-	}
-
-	log.Fatal("test...")
-
+	// log.Fatal("test...")
 	w.Flush()
 	if err := w.Error(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
-func toTransposedList(results []KeyValue, key string, header string) []string {
-	record := make([]string, 0, len(results)+1)
-	record = append(record, header)
+func toTransposedList(results []KeyValue, key string) (record []string) {
 	for _, result := range results {
 		if value, ok := result[key]; ok {
 			record = append(record, toString(value))
-		} else {
-			record = append(record, "")
 		}
+	}
+	return record
+}
+
+func toTransposedList2(results KeyValue, extra ...string) []string {
+	record := make([]string, 0, 1+len(extra))
+	record = append(record, extra...)
+	for _, result := range results {
+		record = append(record, toString(result))
 	}
 	return record
 }

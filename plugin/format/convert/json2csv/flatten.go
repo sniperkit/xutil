@@ -46,6 +46,15 @@ func flatten(obj interface{}) (KeyValue, error) {
 	return f, nil
 }
 
+func flatten2(obj interface{}) (map[string]interface{}, error) {
+	f := make(map[string]interface{}, 0)
+	key := jsonpointer.JSONPointer{}
+	if err := _flatten(f, obj, key); err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
 func _flatten(out KeyValue, obj interface{}, key jsonpointer.JSONPointer) error {
 	value, ok := obj.(reflect.Value)
 	if !ok {

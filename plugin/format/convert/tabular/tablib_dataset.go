@@ -216,6 +216,16 @@ func (d *Dataset) AppendDynamicColumn(header string, fn DynamicColumn) {
 	}
 }
 
+// AppendColumnWithValue appends a column to the Dataset with a default value.
+func (d *Dataset) AppendColumnWithValue(header string, col interface{}) {
+	d.headers = append(d.headers, header)
+	d.constraints = append(d.constraints, nil)
+	d.cols++
+	for i, e := range d.data {
+		d.data[i] = append(e, col)
+	}
+}
+
 // ConstrainColumn adds a constraint to a column in the Dataset.
 func (d *Dataset) ConstrainColumn(header string, constraint ColumnConstraint) {
 	i := indexOfColumn(header, d)
