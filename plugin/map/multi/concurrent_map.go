@@ -1,6 +1,8 @@
 package maps
 
-import "sync"
+import (
+	"sync"
+)
 
 // NewConcurrentMap creates a new concurrent map
 func NewConcurrentMap() *ConcurrentMap {

@@ -126,8 +126,11 @@ func (w *CSVWriter) writeCSV(results []KeyValue) error {
 	keys := pts.Strings()
 	header := w.getHeader(pts)
 
-	if err := w.Write(header); err != nil {
-		return err
+	if !w.hDone {
+		w.hDone = true
+		if err := w.Write(header); err != nil {
+			return err
+		}
 	}
 
 	for _, result := range results {
@@ -138,9 +141,9 @@ func (w *CSVWriter) writeCSV(results []KeyValue) error {
 	}
 
 	// w.Flush()
-	//if err := w.Error(); err != nil {
-	//	return err
-	//}
+	if err := w.Error(); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -224,7 +227,7 @@ func allPointers(results []KeyValue) (pointers pointers, err error) {
 	set := make(map[string]bool, 0)
 	for _, result := range results {
 		for _, key := range result.Keys() {
-			log.Println("key=", key)
+			// log.Println("key=", key)
 			if !set[key] {
 				set[key] = true
 				pointer, err := jsonpointer.New(key)
