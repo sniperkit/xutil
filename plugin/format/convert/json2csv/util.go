@@ -15,6 +15,22 @@ func valueOf(obj interface{}) reflect.Value {
 	if !ok {
 		v = reflect.ValueOf(obj)
 	}
+
+	/*
+		// Ignore unexported fields
+		// and embedded unexported fields
+		if !fv.CanSet() {
+			continue
+		}
+
+		if fv.Kind() == reflect.Ptr && fv.IsNil() {
+			continue
+		}
+		if fv.Kind() == reflect.Slice && fv.IsNil() {
+			continue
+		}
+	*/
+
 	for v.Kind() == reflect.Interface || v.Kind() == reflect.Ptr { // && !v.IsNil() {
 		if v.IsValid() {
 			v = v.Elem()
@@ -94,6 +110,43 @@ func sortedKeys(m map[string]interface{}) []string {
 	}
 	sort.Strings(keys)
 	return keys
+}
+
+func InSlice(needle interface{}, haystack []interface{}) bool {
+	for _, v := range haystack {
+		if v == needle {
+			return true
+		}
+	}
+	return false
+}
+
+// from http://stackoverflow.com/questions/19374219/how-to-find-the-difference-between-two-slices-of-strings-in-golang
+func SliceDiff(slice1 []string, slice2 []string) []string {
+	var diff []string
+
+	// Loop two times, first to find slice1 strings not in slice2,
+	// second loop to find slice2 strings not in slice1
+	for i := 0; i < 2; i++ {
+		for _, s1 := range slice1 {
+			found := false
+			for _, s2 := range slice2 {
+				if s1 == s2 {
+					found = true
+					break
+				}
+			}
+			// String not found. We add it to return slice
+			if !found {
+				diff = append(diff, s1)
+			}
+		}
+		// Swap the slices, only if it was the first loop
+		if i == 0 {
+			slice1, slice2 = slice2, slice1
+		}
+	}
+	return diff
 }
 
 /*

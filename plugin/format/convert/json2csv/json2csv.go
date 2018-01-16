@@ -4,6 +4,7 @@ package json2csv
 import (
 	"errors"
 	"reflect"
+	// "github.com/thoas/go-funk"
 	// ureflect "github.com/XieZhendong/ureflect"
 	// "github.com/oleiade/reflections"
 )
