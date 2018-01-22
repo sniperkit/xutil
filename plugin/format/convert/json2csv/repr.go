@@ -11,7 +11,7 @@ import (
 func Repr(o interface{}) string {
 	var buf bytes.Buffer
 	v := reflect.ValueOf(o)
-	toString(&buf, v)
+	rString(&buf, v)
 	return buf.String()
 }
 
@@ -31,7 +31,7 @@ func Slice(w io.Writer, v reflect.Value) {
 			w.Write([]byte{' '})
 		}
 		// Write a string repr for the element
-		toString(w, v.Index(i))
+		rString(w, v.Index(i))
 	}
 
 	w.Write([]byte{']'})
@@ -46,9 +46,9 @@ func Map(w io.Writer, v reflect.Value) {
 			// Separate map elements with a " " character
 			w.Write([]byte{' '})
 		}
-		toString(w, key)
+		rString(w, key)
 		w.Write([]byte{':'})
-		toString(w, v.MapIndex(key))
+		rString(w, v.MapIndex(key))
 	}
 
 	w.Write([]byte{']'})
@@ -98,14 +98,14 @@ func Struct(w io.Writer, v reflect.Value) {
 
 		w.Write([]byte(v.Type().Field(i).Name))
 		w.Write([]byte{':'})
-		toString(w, fv)
+		rString(w, fv)
 	}
 
 	w.Write([]byte{'}'})
 }
 
 // toString writes a repr for val based on its reflect.Kind
-func toString(w io.Writer, val reflect.Value) {
+func rString(w io.Writer, val reflect.Value) {
 	// Check the zero value first and return early
 	// This is the case of reflect.ValueOf(nil)
 	if val == (reflect.Value{}) {

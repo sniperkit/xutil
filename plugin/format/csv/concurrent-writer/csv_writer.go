@@ -8,6 +8,11 @@ import (
 	"sync"
 )
 
+/*
+	Refs:
+	- https://github.com/free/concurrent-writer/blob/master/concurrent/writer.go
+*/
+
 // CsvWriter holds pointers to a Mutex, csv.Writer and the underlying CSV file
 type CsvWriter struct {
 	mutex     *sync.Mutex
@@ -17,12 +22,18 @@ type CsvWriter struct {
 
 // NewCsvWriter creates a CSV file and returns a CsvWriter
 func NewWriterToFile(fileName string) (*CsvWriter, error) {
-	csvFile, err := os.Create(fileName)
+	f, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return nil, err
 	}
-	w := csv.NewWriter(csvFile)
-	return &CsvWriter{csvWriter: w, mutex: &sync.Mutex{}, f: csvFile}, nil
+	/*
+		csvFile, err := os.Create(fileName)
+		if err != nil {
+			return nil, err
+		}
+	*/
+	w := csv.NewWriter(f)
+	return &CsvWriter{csvWriter: w, mutex: &sync.Mutex{}, f: f}, nil
 }
 
 // NewCSVWriter returns new CSVWriter with JSONPointerStyle.
